@@ -1,13 +1,20 @@
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../store";
 import { CartItem } from "./CartItem";
-import { clearCart } from "../features/cart/CartSlice";
+import { calculateTotals } from "../features/cart/CartSlice";
+import { openModal } from "../features/modal/ModalSlice";
+import { useEffect } from "react";
 
 export const CartContainer = () => {
   const dispatch = useDispatch();
   const { amount, cartItems, total } = useSelector(
     (state: RootState) => state.cart
   );
+
+  useEffect(() => {
+    dispatch(calculateTotals());
+  }, [cartItems]);
+
   if (amount < 1) {
     return (
       <section className="cart">
@@ -37,7 +44,7 @@ export const CartContainer = () => {
           </div>
           <button
             className="btn clear-btn"
-            onClick={() => dispatch(clearCart())}
+            onClick={() => dispatch(openModal())}
           >
             全削除
           </button>

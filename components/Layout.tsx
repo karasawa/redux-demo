@@ -1,8 +1,9 @@
 import Head from "next/head";
 import { FC, ReactNode } from "react";
-import { Provider } from "react-redux";
-import { store } from "../store";
+import { Modal } from "./Modal";
 import { Navbar } from "./Navbar";
+import { useSelector, useDispatch } from "react-redux";
+import type { RootState } from "../store";
 
 type Props = {
   title: string;
@@ -10,15 +11,16 @@ type Props = {
 };
 
 export const Layout: FC<Props> = ({ title = "default title", children }) => {
+  const { isOpen } = useSelector((state: RootState) => state.modal);
+
   return (
     <div>
-      <Provider store={store}>
-        <Head>
-          <title>{title}</title>
-        </Head>
-        <Navbar />
-        <main>{children}</main>
-      </Provider>
+      <Head>
+        <title>{title}</title>
+      </Head>
+      {isOpen ? <Modal /> : <></>}
+      <Navbar />
+      <main>{children}</main>
     </div>
   );
 };
